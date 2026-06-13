@@ -1,0 +1,33 @@
+{
+  "name": "e2e-encrypted-chat",
+  "version": "1.0.0",
+  "description": "End-to-end encrypted chat implementing the Signal Protocol (X3DH key agreement + Double Ratchet forward secrecy) on top of the Web Crypto API",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "encryption",
+    "end-to-end-encryption",
+    "e2ee",
+    "signal-protocol",
+    "x3dh",
+    "double-ratchet",
+    "forward-secrecy",
+    "cryptography",
+    "web-crypto",
+    "ecdh"
+  ],
+  "author": "",
+  "license": "MIT"
+}

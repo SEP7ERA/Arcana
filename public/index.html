@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E2EE Chat — Signal-style encryption</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🔒</text></svg>"
+    />
+  </head>
+  <body>
+    <!-- Login screen -->
+    <div id="login" class="login-overlay">
+      <form id="login-form" class="login-card" autocomplete="off">
+        <div class="lock">🔒</div>
+        <h1>End-to-End Encrypted Chat</h1>
+        <p class="subtitle">
+          X3DH key agreement · Double Ratchet forward secrecy. Your keys are
+          generated in this browser and never leave it.
+        </p>
+        <input
+          id="username-input"
+          type="text"
+          placeholder="Choose a display name"
+          maxlength="24"
+          required
+        />
+        <button type="submit">Generate keys &amp; connect</button>
+        <div id="login-status" class="login-status"></div>
+      </form>
+    </div>
+
+    <!-- Main app -->
+    <div id="app" class="app hidden">
+      <aside class="sidebar">
+        <div class="me">
+          <div class="me-name">
+            <span class="dot online"></span>
+            <span id="me-username">—</span>
+          </div>
+          <div class="me-fp" title="Your public-key fingerprint">
+            🔑 <span id="me-fingerprint">—</span>
+          </div>
+        </div>
+        <div class="sidebar-label">Online now</div>
+        <ul id="user-list" class="user-list"></ul>
+        <div class="sidebar-footer">
+          Messages relayed by the server are encrypted. The server only sees
+          ciphertext.
+        </div>
+      </aside>
+
+      <main class="chat">
+        <header class="chat-header">
+          <div>
+            <div id="peer-name" class="peer-name">Select a contact</div>
+            <div id="peer-status" class="peer-status"></div>
+          </div>
+          <button id="safety-btn" class="ghost-btn hidden" title="Verify identity">
+            🛡️ Safety number
+          </button>
+        </header>
+
+        <div id="safety-panel" class="safety-panel hidden">
+          <strong>Safety number</strong>
+          <p>
+            Compare this code with your contact through another channel. If it
+            matches on both screens, no one is intercepting your conversation.
+          </p>
+          <code id="safety-number">—</code>
+        </div>
+
+        <div id="messages" class="messages">
+          <div class="empty-state">
+            <p>🔐 Pick someone from the left to start an encrypted conversation.</p>
+            <p class="hint">
+              Open this page in a second browser tab, sign in with a different
+              name, and message yourself to see it work.
+            </p>
+          </div>
+        </div>
+
+        <form id="composer" class="composer hidden">
+          <input
+            id="message-input"
+            type="text"
+            placeholder="Type an encrypted message…"
+            autocomplete="off"
+          />
+          <button type="submit">Send</button>
+        </form>
+      </main>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
