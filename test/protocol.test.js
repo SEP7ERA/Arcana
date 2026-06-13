@@ -142,6 +142,37 @@ test("a third party with different keys cannot decrypt", async () => {
   });
 });
 
+test("group fan-out: each member decrypts only their own copy", async () => {
+  // Groups encrypt a message separately per member over pairwise sessions.
+  const alice = await Identity.create();
+  const bob = await Identity.create();
+  const carol = await Identity.create();
+
+  const aliceToBob = await Session.initiate(alice, await bundleWithOneOPK(bob));
+  const aliceToCarol = await Session.initiate(alice, await bundleWithOneOPK(carol));
+
+  const text = "hello team";
+  const envBob = await aliceToBob.encrypt(text);
+  envBob.group = "g1";
+  const envCarol = await aliceToCarol.encrypt(text);
+  envCarol.group = "g1";
+
+  // Same plaintext, but an independent ciphertext per member.
+  assert.notEqual(envBob.ciphertext, envCarol.ciphertext);
+
+  const bobSession = await Session.respond(bob, envBob);
+  assert.equal(await bobSession.decrypt(envBob), text);
+
+  const carolSession = await Session.respond(carol, envCarol);
+  assert.equal(await carolSession.decrypt(envCarol), text);
+
+  // Bob cannot open the copy addressed to Carol.
+  await assert.rejects(async () => {
+    const s = await Session.respond(bob, envCarol);
+    await s.decrypt(envCarol);
+  });
+});
+
 test("safety numbers are symmetric and verifiable", async () => {
   const a = await Identity.create();
   const b = await Identity.create();

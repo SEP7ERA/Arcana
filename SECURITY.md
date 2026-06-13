@@ -40,6 +40,7 @@ two honest endpoints:
 | **Trust-on-first-use** | Identity binding relies on users comparing safety numbers. Without that out-of-band check, a server that swaps keys at first contact is not automatically detected. |
 | **Denial of service** | No rate limiting, abuse controls, or auth on the relay. |
 | **Key persistence** | Keys live in memory only; there is no secure at-rest storage. |
+| **Group membership integrity** | The group stub trusts the server's roster. Each group message is individually forward-secret (it is a normal 1:1 Double Ratchet message), but there is no cryptographic authentication of *who is in the group* — a malicious server could add a member. A fuller design would authenticate the roster and use Sender Keys. |
 
 ## Cryptographic choices
 

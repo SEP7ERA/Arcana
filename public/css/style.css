@@ -174,11 +174,45 @@ button {
   color: var(--text-dim);
 }
 
+.sidebar-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mini-btn {
+  background: var(--bg-elev-2);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.5rem;
+  font-size: 0.7rem;
+}
+
+.mini-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
 .user-list {
   list-style: none;
   overflow-y: auto;
-  flex: 1;
   min-height: 0;
+}
+
+#user-list {
+  flex: 1;
+}
+
+.group-list {
+  max-height: 30vh;
+}
+
+.group-icon {
+  width: 9px;
+  text-align: center;
+  color: var(--text-dim);
+  font-weight: 700;
+  flex: none;
 }
 
 .user-list li {
@@ -386,6 +420,104 @@ button {
 }
 
 .composer button:hover {
+  filter: brightness(1.1);
+}
+
+.msg .sender {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
+.msg.in .sender {
+  color: #7ab7ff;
+}
+
+/* ---------- Group modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  padding: 1rem;
+}
+
+.modal-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+  width: min(420px, 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.modal-sub {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.modal-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  margin: 1rem 0 0.5rem;
+}
+
+.group-members {
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.member-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.member-option:hover {
+  background: var(--bg-elev-2);
+}
+
+.modal-note {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.modal-actions button {
+  padding: 0.55rem 1.1rem;
+}
+
+.modal-actions button[type="submit"] {
+  background: var(--accent);
+  color: white;
+}
+
+.modal-actions button[type="submit"]:hover {
   filter: brightness(1.1);
 }
 

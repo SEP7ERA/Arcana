@@ -106,6 +106,27 @@ hand-rolled elliptic-curve or cipher math.
 
 ---
 
+## Group chat (stub)
+
+Groups use **pairwise fan-out**: to send a message to a group, the client
+encrypts it *separately* for each member over that member's own Double Ratchet
+session, then sends one envelope per recipient. The relay tracks only the group
+roster (who is a member) — it never participates in group encryption.
+
+```
+                       ┌── encrypt(session_Bob) ──▶  envelope → Bob
+  "hi team" ──┬────────┼── encrypt(session_Carol) ─▶  envelope → Carol
+              │        └── encrypt(session_Dave) ──▶  envelope → Dave
+              └─ each copy is an independent, forward-secret ciphertext
+```
+
+This is the simplest design that preserves the 1:1 security properties for every
+group message. It is **O(n)** in members per message (no Sender-Key
+optimization) and does not add cryptographic group-membership authentication —
+hence "stub". See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#group-messaging-stub).
+
+---
+
 ## Getting started
 
 **Requirements:** Node.js **20+** (for global Web Crypto) and a modern browser.
@@ -183,8 +204,9 @@ endpoints, not in the server.
   identity. (A production app would persist keys in IndexedDB/secure storage.)
 - No accounts, passwords, or transport TLS in the dev setup — run it behind
   HTTPS for anything beyond local experimentation.
-- Group chat, attachments, and sealed-sender metadata protection are out of
-  scope.
+- Group chat is a **pairwise fan-out stub** (O(n) per message, no Sender Keys
+  and no cryptographic membership authentication). Attachments and sealed-sender
+  metadata protection are out of scope.
 - P-256 is used instead of Curve25519 (see note above).
 
 ---

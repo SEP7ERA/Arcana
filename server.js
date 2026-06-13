@@ -40,6 +40,17 @@ const bundles = new Map();
 const online = new Map();
 const offlineQueue = new Map();
 
+/**
+ * Group rosters. The server only tracks *who is in a group* (metadata) so every
+ * member sees a consistent membership list. It never participates in group
+ * encryption: a group message is just N ordinary 1:1 encrypted envelopes, one
+ * per member, relayed through the normal `message` path.
+ *
+ *   groups: groupId -> { id, name, members: string[], createdBy }
+ */
+const groups = new Map();
+let groupCounter = 0;
+
 function send(ws, payload) {
   if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(payload));
 }
@@ -112,6 +123,27 @@ wss.on("connection", (ws) => {
             send(ws, { type: "message", from: item.from, envelope: item.envelope });
           }
           offlineQueue.delete(username);
+        }
+
+        // Re-share any groups this user belongs to.
+        for (const group of groups.values()) {
+          if (group.members.includes(username)) send(ws, { type: "group", group });
+        }
+        break;
+      }
+
+      case "create-group": {
+        const name = String(msg.name || "Group").slice(0, 40);
+        const members = Array.isArray(msg.members)
+          ? [...new Set([...msg.members, ws.username])] // creator is always a member
+          : [ws.username];
+        const id = `g_${++groupCounter}_${Date.now().toString(36)}`;
+        const group = { id, name, members, createdBy: ws.username };
+        groups.set(id, group);
+        // Announce the new group to every member who is online.
+        for (const member of members) {
+          const memberWs = online.get(member);
+          if (memberWs) send(memberWs, { type: "group", group });
         }
         break;
       }

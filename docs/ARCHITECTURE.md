@@ -126,6 +126,41 @@ Each `Session` owns one `DoubleRatchet`. The two sides initialize differently:
 Skipped message keys are stored in a bounded map (`MAX_SKIP = 1000`) keyed by
 `(ratchet public key, message number)`.
 
+## Group messaging (stub)
+
+Groups are built entirely on top of the existing 1:1 sessions — there is **no
+separate group cipher**. The server keeps a roster only so members agree on who
+belongs to a group:
+
+```jsonc
+// server → member
+{ "type": "group", "group": { "id": "g_1_…", "name": "Team", "members": ["alice","bob","carol"], "createdBy": "alice" } }
+```
+
+Sending a group message is a fan-out:
+
+```
+for each member m (≠ me):
+    session = sessionWith(m)            // established lazily via X3DH
+    envelope = session.encrypt(text)    // a full Double Ratchet message
+    envelope.group = groupId            // plaintext routing tag
+    relay → m
+```
+
+On receipt, the recipient decrypts with its session for `from` and, seeing the
+`group` tag, files the message under the group conversation labelled with the
+sender. Because the ciphertext only decrypts under the sender's session, the
+sender attribution is cryptographically sound even though the relay supplies the
+`from` field.
+
+Properties and trade-offs:
+
+- ✅ Every group message inherits 1:1 **forward secrecy** and integrity.
+- ✅ The server still sees only ciphertext + metadata.
+- ⚠️ **O(n)** ciphertexts per message (no Sender-Key broadcast optimization).
+- ⚠️ No cryptographic proof of group membership — a fuller design would
+  authenticate the roster and add Sender Keys. This is why it is a *stub*.
+
 ## Offline delivery
 
 Because X3DH only needs Bob's *published* bundle, Alice can encrypt to Bob while
