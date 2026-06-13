@@ -1,5 +1,9 @@
 # 🔒 End-to-End Encrypted Chat
 
+[![CI](https://github.com/SEP7ERA/e2e-encrypted-chat/actions/workflows/ci.yml/badge.svg)](https://github.com/SEP7ERA/e2e-encrypted-chat/actions/workflows/ci.yml)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-3c873a)](package.json)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 A working, from-scratch implementation of the **Signal Protocol** — **X3DH**
 key agreement plus the **Double Ratchet** algorithm — built on the Web Crypto
 API. Two people can exchange messages that are encrypted on one device and only
