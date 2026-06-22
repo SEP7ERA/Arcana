@@ -1,4 +1,4 @@
-# 🔒 End-to-End Encrypted Chat
+#  End-to-End Encrypted Chat
 
 [![CI](https://github.com/SEP7ERA/e2e-encrypted-chat/actions/workflows/ci.yml/badge.svg)](https://github.com/SEP7ERA/e2e-encrypted-chat/actions/workflows/ci.yml)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-3c873a)](package.json)
